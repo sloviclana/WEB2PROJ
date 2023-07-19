@@ -10,6 +10,7 @@ Postoje tri vrste korisnika ovog sistema:
 2. Prodavac
 3. Kupac
 
+
 2. Funkcije sistema
 
 2.1. Prikaz informacija neregistrovanim korisnicima

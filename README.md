@@ -2,7 +2,7 @@
 Programiranje u Smart Grid sistemima
 Projektni zadatak za 2023. godinu
 
-1. Opis zadatka
+  1. Opis zadatka
 Realizovati aplikaciju za online kupovinu.
 
 Postoje tri vrste korisnika ovog sistema:
@@ -10,8 +10,7 @@ Postoje tri vrste korisnika ovog sistema:
 2. Prodavac
 3. Kupac
 
-
-2. Funkcije sistema
+   2. Funkcije sistema
 
 2.1. Prikaz informacija neregistrovanim korisnicima
 Prva stranica koju (neregistrovan) korisnik vidi je početna stranica aplikacije na kojoj je moguće ili
@@ -100,7 +99,7 @@ Prodavac može da vidi prethodne porudžbine.
 Administrator ima uvid u sve porudžbine kao i njihov status. Za porudžbine u toku nije potrebno
 odbrojavanje do dostave.
 
-3. Implementacija sistema
+  3. Implementacija sistema
 
 3.1. Serverske platforme
 Za realizaciju projekta koristi se serverska platforma:

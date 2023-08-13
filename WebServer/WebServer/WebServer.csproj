@@ -25,7 +25,6 @@
     <Folder Include="Interfaces\" />
     <Folder Include="Migrations\" />
     <Folder Include="Database\" />
-    <Folder Include="Repository\" />
     <Folder Include="Services\" />
   </ItemGroup>
 

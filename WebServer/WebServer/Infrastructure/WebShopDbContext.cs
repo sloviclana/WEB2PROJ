@@ -8,8 +8,8 @@ namespace WebServer.Infrastructure
     {
 
         public DbSet<User> Users { get; set; }
-        DbSet<Article> Articles { get; set; }
-        DbSet<Order> Orders { get; set; }
+        public DbSet<Article> Articles { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
         public WebShopDbContext(DbContextOptions options) : base(options) 
         { 

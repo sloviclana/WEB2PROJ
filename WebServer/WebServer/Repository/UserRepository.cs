@@ -1,48 +1,64 @@
-﻿using WebServer.Models;
+﻿using WebServer.Infrastructure;
+using WebServer.Models;
 using WebServer.Repository.Interfaces;
 
 namespace WebServer.Repository
 {
     public class UserRepository : IUserRepository
     {
+        private WebShopDbContext _webShopDbContext;
+
+        public UserRepository(WebShopDbContext webShopDbContext)
+        {
+            _webShopDbContext = webShopDbContext;
+        }
+
         public User Add(User user)
         {
-            throw new NotImplementedException();
+            _webShopDbContext.Add(user);
+            _webShopDbContext.SaveChanges();
+
+            return user;
         }
 
         public User Edit(User user)
         {
-            throw new NotImplementedException();
+            _webShopDbContext.Users.Update(user);
+            _webShopDbContext.SaveChanges();
+            return user;
         }
 
         public User Find(User user)
         {
-            throw new NotImplementedException();
+            return _webShopDbContext.Users.SingleOrDefault<User>(u => String.Equals(u.Username, user.Username));
         }
 
         public User FindById(long id)
         {
-            throw new NotImplementedException();
+            return _webShopDbContext.Users.SingleOrDefault<User>(u => u.Id == id);
         }
 
         public User FindEmail(User user)
         {
-            throw new NotImplementedException();
+            return _webShopDbContext.Users.SingleOrDefault<User>(u => String.Equals(u.Email, user.Email));
         }
 
         public List<User> GetAll()
         {
-            throw new NotImplementedException();
+            return _webShopDbContext.Users.ToList();
         }
 
         public void Remove(User user)
         {
-            throw new NotImplementedException();
+            _webShopDbContext.Users.Remove(user);
+            _webShopDbContext.SaveChanges();
         }
 
         public User Verify(User user)
         {
-            throw new NotImplementedException();
+            _webShopDbContext.Users.Update(user);
+            _webShopDbContext.SaveChanges();
+            return user;   
         }
     }
 }

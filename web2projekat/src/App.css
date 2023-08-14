@@ -13,6 +13,14 @@
   }
 }
 
+.redLabel {
+   color: red;
+}
+
+.blueButton {
+  color: blue;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -22,6 +30,39 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.centered-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.container {
+  background-color: white;
+  border: 1px solid indigo;
+  display: inline-flex;
+  border-radius: 10px;
+  padding: 10px;
+  
+}
+
+body {
+  background-color: lightblue;
+  background-image: url('./images/webShopImg2.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.welcomeTitle {
+  color: indigo;
+  object-position: center;
+}
+
+.subHeader {
+  font-size: small;
+  color: indigo;
 }
 
 .App-link {

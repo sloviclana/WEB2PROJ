@@ -26,7 +26,7 @@ const Home = () => {
                         <div>
                             <LogIn></LogIn>
 
-                            Do not have an account? Please sign up here:   
+                            Do not have an account? Please sign up here:      
                             <button className='blueButton' onClick={registerBtn}>Sign up</button>
                             {register ? <Register /> : null}
                         </div>

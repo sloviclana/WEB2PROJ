@@ -53,6 +53,7 @@ body {
   background-image: url('./images/webShopImg2.jpg');
   background-size: cover;
   background-repeat: no-repeat;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 .welcomeTitle {
@@ -67,6 +68,14 @@ body {
 
 .App-link {
   color: #61dafb;
+}
+
+button {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+input {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 @keyframes App-logo-spin {

@@ -1,14 +1,14 @@
 export default class UserDto {
     constructor(data) {
-        this.Id = data.Id,
-        this.Username = data.Username,
-        this.Password = data.Password,
-        this.Email = data.Email,
-        this.FullName = data.FullName,
-        this.DateOfBirth = data.DateOfBirth,
-        this.Address = data.Address,
-        this.UserImage = data.UserImage,
-        this.UserType = data.UserType,
-        this.Verified = data.Verified
+        this.Id = data.id;
+        this.Username = data.username;
+        this.Password = data.password;
+        this.Email = data.email;
+        this.FullName = data.fullName;
+        this.DateOfBirth = data.dateOfBirth;
+        this.Address = data.address;
+        this.UserImage = data.userImage;
+        this.UserType = data.userType;
+        this.Verified = data.verified;
     }
 }

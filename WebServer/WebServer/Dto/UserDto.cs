@@ -4,6 +4,8 @@ namespace WebServer.Dto
 {
     public class UserDto
     {
+        public long Id { get; set; }
+
         [Required]
         public string Username { get; set; }
 
@@ -25,6 +27,6 @@ namespace WebServer.Dto
         public string UserImage { get; set; }
 
         [Required]
-        public string TypeOfUser { get; set; }
+        public string UserType { get; set; }
     }
 }

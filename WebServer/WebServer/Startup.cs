@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebServer.Dto;
+using System.Text.Json.Serialization;
 
 namespace WebServer
 {
@@ -33,7 +34,8 @@ namespace WebServer
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-            );*/
+            );
+            */
 
             services.AddDbContext<WebShopDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -65,9 +67,10 @@ namespace WebServer
                     }
                 });
             });
-            
+
 
             //Dodajemo semu autentifikacije i podesavamo da se radi o JWT beareru
+
             
             services.AddAuthentication(opt =>
             {
@@ -82,26 +85,32 @@ namespace WebServer
                    ValidateAudience = false, //Kazemo da ne validira primaoce tokena
                    ValidateLifetime = true,//Validira trajanje tokena
                    ValidateIssuerSigningKey = true, //validira potpis token, ovo je jako vazno!
-                   ValidIssuer = "http://localhost:44316", //odredjujemo koji server je validni izdavalac
+                   ValidIssuer = "https://localhost:7189", //odredjujemo koji server je validni izdavalac
                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SecretKey"]))//navodimo privatni kljuc kojim su potpisani nasi tokeni
                };
            });
             
 
+            
             services.AddCors(options =>
             {
-                options.AddPolicy(name: _cors, builder => {
+                options.AddPolicy(name: _cors, builder => 
+                {
                     builder.WithOrigins("http://localhost:3000", "https://localhost:3000")//Ovde navodimo koje sve aplikacije smeju kontaktirati nasu
                            .AllowAnyHeader()
                            .AllowAnyMethod()
                            .AllowCredentials();
                 });
             });
+            
+
+            
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("user", policy => policy.RequireClaim("user")); //Ovde mozemo kreirati pravilo za validaciju nekog naseg claima
             });
             
+
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<IOrderService, OrderService>();
@@ -109,16 +118,27 @@ namespace WebServer
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IArticleRepository, ArticleRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+
+
+            //dodavanje za konverziju enumeracija, sa fronta saljem enumeraciju kao string, on je konvertuje ispravno
+            services.AddControllers().AddJsonOptions(x =>
+            {
+                x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                x.JsonSerializerOptions.IgnoreNullValues = true;
+            });
+
+
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();
+
             services.AddSingleton(mapper);
 
         }
-
+        
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -131,8 +151,8 @@ namespace WebServer
             app.UseHttpsRedirection();
             app.UseCors(_cors);
             app.UseRouting();
-            //app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -144,7 +164,7 @@ namespace WebServer
                 var services = scope.ServiceProvider;
                 var myService = services.GetRequiredService<IUserService>();
                 UserDto u = myService.GetUser(1); // Call the service method
-                Console.WriteLine("i got the user: " + u.FullName + " " + u.Address);
+                //Console.WriteLine("i got the user: " + u.FullName + " " + u.Address);
             }
 
         }

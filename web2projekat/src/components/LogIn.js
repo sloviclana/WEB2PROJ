@@ -1,6 +1,8 @@
 import React, { useState } from "react";  
 import { useEffect } from "react";  
 import { useNavigate } from "react-router-dom";
+import Register from "./Register";
+import { LogInUser } from "../services/UserServices";
 
 const LogIn = () => {
 
@@ -8,6 +10,12 @@ const LogIn = () => {
     const[email, setEmail] = useState('');
     const[password, setPassword] = useState('');
     const[error, setError] = useState(false);
+    const [register, setRegister] = useState(false);
+
+    const registerBtn = () => {
+        // Toggle the value when the button is clicked
+        setRegister(!register);
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -52,6 +60,10 @@ const LogIn = () => {
 
             </form>
 
+            <p>Do not have an account? Please sign up here:     </p> 
+            <button className='blueButton' onClick={registerBtn}>Sign up</button>
+            {register ? <Register /> : null}
+            
         </div>
     );
 

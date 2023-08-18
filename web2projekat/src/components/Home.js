@@ -5,12 +5,7 @@ import Register from "./Register";
 
 const Home = () => {
 
-    const [register, setRegister] = useState(false);
-
-    const registerBtn = () => {
-        // Toggle the value when the button is clicked
-        setRegister(!register);
-    };
+    
 
     return (
         <>
@@ -26,9 +21,7 @@ const Home = () => {
                         <div>
                             <LogIn></LogIn>
 
-                            Do not have an account? Please sign up here:      
-                            <button className='blueButton' onClick={registerBtn}>Sign up</button>
-                            {register ? <Register /> : null}
+                           
                         </div>
 
                         

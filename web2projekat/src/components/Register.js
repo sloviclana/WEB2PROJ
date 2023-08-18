@@ -2,13 +2,15 @@ import React from "react";
 import {useState} from "react";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'; // Import the styles
-
+import axios from 'axios';
+import { RegisterUser } from "../services/UserServices";
 
 const Register = () => {
 
     
     const[email, setEmail] = useState('');
     const[password, setPassword] = useState('');
+    const[password2, setPassword2] = useState('');
     const[fullName, setFullName] = useState('');
     const[address, setAddress] = useState('');
     const[dateOfBirth, setDateOfBirth] = useState('');
@@ -16,33 +18,89 @@ const Register = () => {
     const[image, setImage] = useState('');
     const[userType, setUserType] = useState('');
     const[error, setError] = useState(false);
+    const[deliveryPrice, setDeliveryPrice] = useState('');
+    const[isVerified, setIsVerified] = useState('');
+
+
+    const setInputsToEmpty = () => {
+        setEmail('');
+        setUsername('');
+        setPassword('');
+        setPassword2('');
+        setFullName('');
+        setAddress('');
+        setDateOfBirth('');
+        setUserType('');
+        setImage('');
+        setDeliveryPrice('');
+        setIsVerified('');
+    }
+
+    const handleSelectChange = (event) => {
+        setUserType(event.target.value);
+      };
 
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+      
+        //uraditi provere za lozinke, tj. da li se prva i druga poklapaju i da li su uneta stva polja
 
-        if(email.length === 0 || password.length === 0 || fullName.length === 0 
-            || address.length === 0 || username.length === 0 
-            ) {
-            setError(true);
-            return;
+        /*
+        if(username.length === 0 || email.length === 0 || password.length === 0 || password2.length === 0 
+            || fullName.length === 0 || dateOfBirth === null || address.length === 0 || password !== password2
+            || deliveryPrice === 0 || image.length === 0){
+                setError(true);
+                return;
+            }
+        */
+
+        if(password === password2){
+            const userJSON = {
+                Username : username,
+                Email : email,
+                Password : password,
+                FullName : fullName,
+                DateOfBirth : dateOfBirth,
+                UserType : userType,
+                Address : address,
+                DeliveryPrice : deliveryPrice,
+                Verified : isVerified,
+                UserImage : image
+            }
+        ;
+
+
+            const data = await RegisterUser(userJSON);
+
+            if(data !== null){
+                sessionStorage.setItem('isAuth', JSON.stringify(true));
+                sessionStorage.setItem('token', data.token)
+                sessionStorage.setItem('user', JSON.stringify(data.korisnikDto));
+                //handleKorisnikInfo(true); //prvo se postave podaci pa se re reneruje
+                alert("Succesfull registration!!!");
+                //redirectTo(tipKorisnika);
+
+            } else {
+                setInputsToEmpty();
+                sessionStorage.setItem('isAuth', JSON.stringify(false));
+                //handleKorisnikInfo(false);
+            }
         }
-
-
     }
 
     return (
 
         <div>
             <h2>Register (sign up): </h2>
-            <form className="loginForm" onSubmit={handleSubmit}>
+            <form className="registerForm" onSubmit={handleSubmit}>
                 <div className="field">
                     <label>Full name </label>
                     <input type="text"
                             value={fullName}
                             name="fullName"
                             placeholder="Full name"
-                            onChange={(e) => fullName(e.target.value)}/>
+                            onChange={(e) => setFullName(e.target.value)}/>
                     {error && fullName.length === 0 ? <div className="redLabel">You must enter your name!</div> : null}
                 </div>
 
@@ -52,7 +110,7 @@ const Register = () => {
                             value={username}
                             name="username"
                             placeholder="Username"
-                            onChange={(e) => username(e.target.value)}/>
+                            onChange={(e) => setUsername(e.target.value)}/>
                     {error && username.length === 0 ? <div className="redLabel">You must enter your username!</div> : null}
                 </div>
 
@@ -62,8 +120,18 @@ const Register = () => {
                             value={password}
                             name="password"
                             placeholder="Password"
-                            onChange={(e) => password(e.target.value)}/>
+                            onChange={(e) => setPassword(e.target.value)}/>
                     {error && password.length === 0 ? <div className="redLabel">You must enter your password!</div> : null}
+                </div>
+
+                <div className="field">
+                    <label>Confirm your password</label>
+                    <input type="password"
+                            value={password2}
+                            name="password2"
+                            placeholder="Confirm password"
+                            onChange={(e) => setPassword2(e.target.value)}/>
+                    {error && password2.length === 0 ? <div className="redLabel">You must confirm your password!</div> : null}
                 </div>
 
                 <div className="field">
@@ -86,8 +154,29 @@ const Register = () => {
                         
                 </div>
 
+                <div className="field">
+                            <label>Address </label>
+                            <input type="text"
+                                value={address}
+                                name="address"
+                                placeholder="Address"
+                                onChange={(e) => setAddress(e.target.value)}/>
+                            {error && address.length === 0 ? <div className="redLabel">You must enter address!</div> : null}
+                </div>
+
+                <div className="field">
+                            <label>User type </label>
+                            <select value={userType} name="userType" placeholder="User type" onChange={handleSelectChange}>
+                                <option value="">Select user type</option>
+                                <option value={'ADMIN'}>ADMIN</option>
+                                <option value={'SALESMAN'}>SALESMAN</option>
+                                <option value={'CUSTOMER'}>CUSTOMER</option>
+                            </select>
+                            {error && userType.length === 0 ? <div className="redLabel">You must select user type!</div> : null}
+                </div>
+
                 <div className="buttons-flex">
-                        <button className="blueButton" type="submit">Sign up</button>
+                        <button className="blueButton" type="submit" onClick={handleSubmit}>Sign up</button>
                         <div id="singInDiv"></div>
                 </div>
 

@@ -1,4 +1,9 @@
-﻿using WebServer.Dto;
+﻿using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Crypto.Generators;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using WebServer.Dto;
 using WebServer.Models;
 using WebServer.Repository;
 using WebServer.Repository.Interfaces;
@@ -10,24 +15,24 @@ namespace WebServer.Services
     {
         private readonly IUserRepository _userRepo;
 
-        //private readonly IUserRepository _userRepository;
-        //private readonly IConfigurationSection _secretKey;
-        //private readonly IConfigurationSection _facebookSettings;
+        private readonly IUserRepository _userRepository;
+        private readonly IConfigurationSection _secretKey;
+        private readonly IConfigurationSection _facebookSettings;
         //private readonly IMailService _mailservice;
         //private readonly IAuthService _authService;
         IWebHostEnvironment webHostEnvironment;
 
-        /*
-        public UserService(IUserRepository userRepository, IConfiguration config, IMailService mailservice, IAuthService authService, IWebHostEnvironment webHostEnvironment)
+        
+        public UserService(IUserRepository userRepository, IConfiguration config, /* IMailService mailservice, IAuthService authService,*/ IWebHostEnvironment webHostEnvironment)
         {
-            _userRepository = userRepository;
+            _userRepo = userRepository;
             _secretKey = config.GetSection("SecretKey");
             _facebookSettings = config.GetSection("FacebookAuthSettings");
-            _mailservice = mailservice;
-            _authService = authService;
+            //_mailservice = mailservice;
+            //_authService = authService;
             this.webHostEnvironment = webHostEnvironment;
         }
-        */
+        
 
         public UserService(IUserRepository userRepo, IWebHostEnvironment webHostEnvironment)
         {
@@ -46,7 +51,7 @@ namespace WebServer.Services
                 return null;
             }
 
-            User user = new User {Username=newUser.Username, Address = newUser.Address, DateOfBirth = newUser.DateOfBirth, Email = newUser.Email, FullName = newUser.FullName, UserImage = newUser.UserImage, /*Password = BCrypt.Net.BCrypt.HashPassword(newUser.Password)*/ Password = newUser.Password };
+            User user = new User {Username=newUser.Username, Address = newUser.Address, DateOfBirth = newUser.DateOfBirth, Email = newUser.Email, FullName = newUser.FullName, UserImage = newUser.UserImage, Password = BCrypt.Net.BCrypt.HashPassword(newUser.Password) };
             
             if (newUser.UserType == "ADMIN")
             {
@@ -107,7 +112,48 @@ namespace WebServer.Services
 
         public LoginResponseDto LogIn(UserLoginDto dto)
         {
-            throw new NotImplementedException();
+            User user = new User { Email = dto.Email, Password = dto.Password };
+
+            user = _userRepo.Find(user);
+            if (user == null)
+                return null;
+            if (user.Verified == true)
+            {
+                if (BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
+                {
+                    List<Claim> claims = new List<Claim>();
+
+                    if (user.UserType == Enums.UserType.ADMIN)
+                        claims.Add(new Claim(ClaimTypes.Role, "ADMIN"));
+                    else if (user.UserType == Enums.UserType.SALESMAN)
+                        claims.Add(new Claim(ClaimTypes.Role, "SALESMAN"));
+                    else if (user.UserType == Enums.UserType.CUSTOMER)
+                        claims.Add(new Claim(ClaimTypes.Role, "CUSTOMER"));
+
+
+                    claims.Add(new Claim(ClaimTypes.Role, "user"));
+
+                    SymmetricSecurityKey secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey.Value));
+                    var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+                    var tokeOptions = new JwtSecurityToken(
+                        issuer: "http://localhost:7189",
+                        claims: claims,
+                        expires: DateTime.Now.AddYears(1),
+                        signingCredentials: signinCredentials
+                    );
+                    string tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+                    LoginResponseDto loginResponseDto = new LoginResponseDto { Token = tokenString, UserDto = new UserDto { Username = user.Username, Address = user.Address, DateOfBirth = user.DateOfBirth, Email = user.Email, FullName = user.FullName, UserImage = user.UserImage, Password = user.Password, UserType = user.UserType.ToString(), Id = user.Id }, LogedIn = true };
+                    return loginResponseDto;
+                }
+                else
+                {
+                    return new LoginResponseDto { LogedIn = false };
+                }
+            }
+            else
+            {
+                return new LoginResponseDto { LogedIn = false };
+            }
         }
 
         public void Remove(UserDto user)

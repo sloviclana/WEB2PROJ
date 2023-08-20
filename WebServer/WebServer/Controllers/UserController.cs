@@ -27,7 +27,13 @@ namespace WebServer.Controllers
         [HttpPost("login")]
         public IActionResult LogIn([FromBody] UserLoginDto userDto)
         {
-            return Ok(_userService.LogIn(userDto));
+            if (userDto != null)
+            {
+                return Ok(_userService.LogIn(userDto));
+            } else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost("register")]

@@ -30,7 +30,7 @@ namespace WebServer.Repository
 
         public User Find(User user)
         {
-            return _webShopDbContext.Users.SingleOrDefault<User>(u => String.Equals(u.Username, user.Username));
+            return _webShopDbContext.Users.SingleOrDefault<User>(u => String.Equals(u.Email, user.Email));
         }
 
         public User FindById(long id)

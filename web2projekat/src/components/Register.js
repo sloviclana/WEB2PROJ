@@ -1,12 +1,14 @@
 import React from "react";
 import {useState} from "react";
 import DatePicker from 'react-datepicker';
+import { useNavigate } from "react-router-dom";
 import 'react-datepicker/dist/react-datepicker.css'; // Import the styles
 import axios from 'axios';
 import { RegisterUser } from "../services/UserServices";
 
 const Register = () => {
 
+    const navigate = useNavigate();
     
     const[email, setEmail] = useState('');
     const[password, setPassword] = useState('');
@@ -39,6 +41,10 @@ const Register = () => {
     const handleSelectChange = (event) => {
         setUserType(event.target.value);
       };
+
+    const redirectTo = () => {
+        navigate('/');
+    }
 
 
     const handleSubmit = async (event) => {
@@ -74,12 +80,12 @@ const Register = () => {
             const data = await RegisterUser(userJSON);
 
             if(data !== null){
-                sessionStorage.setItem('isAuth', JSON.stringify(true));
-                sessionStorage.setItem('token', data.token)
-                sessionStorage.setItem('user', JSON.stringify(data.korisnikDto));
+                //sessionStorage.setItem('isAuth', JSON.stringify(true));
+                //sessionStorage.setItem('token', data.token)
+                //sessionStorage.setItem('user', JSON.stringify(data.userDto));
                 //handleKorisnikInfo(true); //prvo se postave podaci pa se re reneruje
                 alert("Succesfull registration!!!");
-                //redirectTo(tipKorisnika);
+                redirectTo();
 
             } else {
                 setInputsToEmpty();
@@ -91,7 +97,7 @@ const Register = () => {
 
     return (
 
-        <div>
+        <div className="card">
             <h2>Register (sign up): </h2>
             <form className="registerForm" onSubmit={handleSubmit}>
                 <div className="field">

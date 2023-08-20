@@ -2,10 +2,15 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import LogIn from "./LogIn";
 import Register from "./Register";
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
 
-    
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate('/login');
+    }
 
     return (
         <>
@@ -19,8 +24,8 @@ const Home = () => {
                         If you do not have account yet, please sing up.
 
                         <div>
-                            <LogIn></LogIn>
-
+                            
+                            <button onClick={handleClick}>Log in</button>
                            
                         </div>
 

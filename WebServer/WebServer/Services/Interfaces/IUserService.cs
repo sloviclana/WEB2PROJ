@@ -12,6 +12,8 @@ namespace WebServer.Services.Interfaces
         UserDto GetUser(long id);
         List<UserDto> GetRequests();
         void Remove(UserDto user);
+
+        
         //Task<LoginResponseDto> LoginExternal(ExternalRegister userInfo);
         Task<bool> UploadImage(IFormFile image, int id);
         byte[] GetImage(int id);

@@ -4,8 +4,10 @@ import { useNavigate } from "react-router-dom";
 import Register from "./Register";
 import { LogInUser } from "../services/UserServices";
 
-const LogIn = () => {
+const LogIn = (/*{handleKorisnikInfo}*/) => {
 
+
+    const navigate = useNavigate();
 
     const[email, setEmail] = useState('');
     const[password, setPassword] = useState('');
@@ -14,8 +16,67 @@ const LogIn = () => {
 
     const registerBtn = () => {
         // Toggle the value when the button is clicked
-        setRegister(!register);
+        navigate('/register');
     };
+
+
+    /* const handleCallbackResponse = async (response) => {
+        console.log("Token: " + response.credential);
+
+        var userObject = jwt_decode(response.credential)
+        var email = userObject.email;
+        var lozinka = userObject.password;
+
+        const data = await LoginUser(email, lozinka);
+        if(data !== null){
+            sessionStorage.setItem("isAuth", JSON.stringify(true));
+            sessionStorage.setItem("token", data.token);
+            sessionStorage.setItem("korisnik", JSON.stringify(data.userDto));
+            const tipKorisnika = data.userDto.tipKorisnika; // propertiji su mala slova
+            handleKorisnikInfo(true); //prvo se postave podaci pa se re reneruje
+            alert("Uspesno ste se logovali");
+            redirectTo(tipKorisnika);
+        }
+        else{
+            
+            sessionStorage.setItem("isAuth", false);
+            handleKorisnikInfo(false); //prvo se postave podaci pa se re reneruje
+            setInputsToEmpty();
+        }
+
+    } */
+
+    //verifikacija korisnika preko gmaila
+    /* useEffect(() => {
+        google.accounts.id.initialize({
+            client_id: process.env.REACT_APP_GOOGLE_CLIENT,
+            callback: handleCallbackResponse
+        });
+
+        google.accounts.id.renderButton(
+            document.getElementById('signInDiv'),
+            {theme: "outline", size:"medium"}
+        )
+    }, []) */
+
+
+
+    const setInputsToEmpty = () => {
+        setEmail('');
+        setPassword(''); 
+    }
+
+    const redirectTo = (tipKorisnika) => {
+        if(tipKorisnika === 'ADMIN'){
+            navigate('/adminDashboard');
+        }
+        else if(tipKorisnika === 'SALESMAN'){
+            navigate('/salesmanDashboard');
+        }
+        else if(tipKorisnika === 'CUSTOMER'){
+            navigate('/customerDashboard');
+        }
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -25,6 +86,22 @@ const LogIn = () => {
             return;
         }
 
+        const data = await LogInUser(email, password);
+        if(data !== null){
+            sessionStorage.setItem("isAuth", JSON.stringify(true));
+            sessionStorage.setItem("token", data.token);
+            sessionStorage.setItem("user", JSON.stringify(data.userDto));
+            const tipKorisnika = data.userDto.UserType; // propertiji su mala slova
+            //handleKorisnikInfo(true); //prvo se postave podaci pa se re reneruje
+            alert("Successfull login!");
+            redirectTo(tipKorisnika);
+        }
+        else{
+            
+            sessionStorage.setItem("isAuth", false);
+            //handleKorisnikInfo(false); //prvo se postave podaci pa se re reneruje
+            setInputsToEmpty();
+        }
 
     }
 
@@ -62,7 +139,7 @@ const LogIn = () => {
 
             <p>Do not have an account? Please sign up here:     </p> 
             <button className='blueButton' onClick={registerBtn}>Sign up</button>
-            {register ? <Register /> : null}
+            {/* {register ? <Register /> : null} */}
             
         </div>
     );

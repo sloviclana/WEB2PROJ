@@ -9,6 +9,6 @@ export default class UserDto {
         this.Address = data.address;
         this.UserImage = data.userImage;
         this.UserType = data.userType;
-        this.Verified = data.verified;
+        //this.Verified = data.verified;
     }
 }

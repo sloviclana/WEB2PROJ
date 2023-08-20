@@ -159,14 +159,15 @@ namespace WebServer
                 endpoints.MapControllers();
             });
 
+            /*
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var services = scope.ServiceProvider;
                 var myService = services.GetRequiredService<IUserService>();
-                UserDto u = myService.GetUser(1); // Call the service method
+                //UserDto u = myService.GetUser(1); // Call the service method
                 //Console.WriteLine("i got the user: " + u.FullName + " " + u.Address);
             }
-
+            */
         }
 
 

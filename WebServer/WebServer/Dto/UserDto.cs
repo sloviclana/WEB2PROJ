@@ -28,5 +28,7 @@ namespace WebServer.Dto
 
         [Required]
         public string UserType { get; set; }
+
+        public bool Verified { get; set; }
     }
 }

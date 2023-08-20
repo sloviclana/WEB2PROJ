@@ -21,11 +21,26 @@ namespace WebServer.Repository
             return user;
         }
 
-        public User Edit(User user)
+        public User Edit(User userPrev, User userNew)
         {
-            _webShopDbContext.Users.Update(user);
+            _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).UserImage = userNew.UserImage;
+            _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).UserType = userNew.UserType;
+            _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).FullName = userNew.FullName;
+            _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Username = userNew.Username;
+
+            if(_webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Password != userNew.Password)
+                _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Password = BCrypt.Net.BCrypt.HashPassword(userNew.Password);
+
+            _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Password = userNew.Password;
+            //_webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Id = userNew.Id;
+            _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Email = userNew.Email;
+            _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).DateOfBirth = userNew.DateOfBirth;
+            _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Address = userNew.Address;
+            _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Verified = userNew.Verified;
+
+
             _webShopDbContext.SaveChanges();
-            return user;
+            return userNew;
         }
 
         public User Find(User user)

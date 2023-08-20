@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using Org.BouncyCastle.Crypto.Generators;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -18,12 +19,13 @@ namespace WebServer.Services
         private readonly IUserRepository _userRepository;
         private readonly IConfigurationSection _secretKey;
         private readonly IConfigurationSection _facebookSettings;
+        private readonly IMapper _mapper;
         //private readonly IMailService _mailservice;
         //private readonly IAuthService _authService;
         IWebHostEnvironment webHostEnvironment;
 
         
-        public UserService(IUserRepository userRepository, IConfiguration config, /* IMailService mailservice, IAuthService authService,*/ IWebHostEnvironment webHostEnvironment)
+        public UserService(IUserRepository userRepository, IConfiguration config, /* IMailService mailservice, IAuthService authService,*/ IWebHostEnvironment webHostEnvironment, IMapper mapper)
         {
             _userRepo = userRepository;
             _secretKey = config.GetSection("SecretKey");
@@ -31,6 +33,7 @@ namespace WebServer.Services
             //_mailservice = mailservice;
             //_authService = authService;
             this.webHostEnvironment = webHostEnvironment;
+            _mapper = mapper;
         }
         
 
@@ -42,7 +45,7 @@ namespace WebServer.Services
 
         public UserDto AddUser(UserDto newUser)
         {
-             if(_userRepo.Find(new User { Username = newUser.Username })!=null)
+            if(_userRepo.Find(new User { Username = newUser.Username })!=null)
             {
                 return null;
             }
@@ -76,7 +79,44 @@ namespace WebServer.Services
 
         public UserDto Edit(UserDto dto)
         {
-            throw new NotImplementedException();
+            User u = new User()
+            {
+                Id = dto.Id,
+                Username = dto.Username,
+                Address = dto.Address,
+                DateOfBirth = dto.DateOfBirth,
+                Email = dto.Email,
+                FullName = dto.FullName,
+                UserImage = dto.UserImage,
+                Password = dto.Password,
+                Verified = dto.Verified
+            };
+
+            if (dto.UserType == "ADMIN")
+                u.UserType = Enums.UserType.ADMIN;
+                //u.Verified = true;
+            else if (dto.UserType == "SALESMAN")
+                u.UserType = Enums.UserType.SALESMAN;
+            else
+                u.UserType = Enums.UserType.CUSTOMER;
+
+            string oldPassword = u.Password;
+            string newPassword = BCrypt.Net.BCrypt.HashPassword(u.Password);
+            u.Password = newPassword;
+
+            User previous = _userRepo.Find(u);
+
+            if (previous == null)
+            {
+                return null;
+
+            } else
+            {
+                _userRepo.Edit(previous, u);
+            }
+
+            u.Password = oldPassword;
+            return _mapper.Map<UserDto>(u);
         }
 
         public byte[] GetImage(int id)
@@ -142,7 +182,7 @@ namespace WebServer.Services
                         signingCredentials: signinCredentials
                     );
                     string tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-                    LoginResponseDto loginResponseDto = new LoginResponseDto { Token = tokenString, UserDto = new UserDto { Username = user.Username, Address = user.Address, DateOfBirth = user.DateOfBirth, Email = user.Email, FullName = user.FullName, UserImage = user.UserImage, Password = user.Password, UserType = user.UserType.ToString(), Id = user.Id }, LogedIn = true };
+                    LoginResponseDto loginResponseDto = new LoginResponseDto { Token = tokenString, UserDto = new UserDto { Username = user.Username, Address = user.Address, DateOfBirth = user.DateOfBirth, Email = user.Email, FullName = user.FullName, UserImage = user.UserImage, Password = dto.Password, UserType = user.UserType.ToString(), Id = user.Id }, LogedIn = true };
                     return loginResponseDto;
                 }
                 else

@@ -43,3 +43,23 @@ export const RegisterUser = async (UserDto) => {
         return null;
     }
 }
+
+export const UpdateUserProfile = async(UserDto) => {
+    const UPDATEPROFILE_URL = "api/users/update";
+
+    try{
+        const {data} = await axios.post(`${process.env.REACT_APP_API_URL}${UPDATEPROFILE_URL}`,
+            UserDto,
+            {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            }
+        );
+        const response = new RegisterResponseDto(data);
+        return response;
+
+    }catch(err){
+        alert("Something went wrong with profile update!");
+        return null;
+    }
+}

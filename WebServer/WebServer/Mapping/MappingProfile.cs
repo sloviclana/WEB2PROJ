@@ -9,6 +9,8 @@ namespace WebServer.Mapping
         public MappingProfile() 
         {
             CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<Order, OrderDto>().ReverseMap();
+            CreateMap<Article, ArticleDto>().ReverseMap();
 
         }
     }

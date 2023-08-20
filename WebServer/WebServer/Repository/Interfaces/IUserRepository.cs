@@ -8,7 +8,7 @@ namespace WebServer.Repository.Interfaces
         User Add(User user);
         User Find(User user);
         User FindEmail(User user);
-        User Edit(User user);
+        User Edit(User userPrev, User userNew);
         User Verify(User user);
         User FindById(long id);
         List<User> GetAll();

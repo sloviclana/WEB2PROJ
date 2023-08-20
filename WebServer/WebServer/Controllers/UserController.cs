@@ -49,5 +49,18 @@ namespace WebServer.Controllers
             }
         }
 
+        [HttpPost("update")]
+        public IActionResult UpdateProfile([FromBody] UserDto UserDto)
+        {
+            if(UserDto != null)
+            {
+                return Ok(_userService.Edit(UserDto));
+
+            } else
+            {
+                return BadRequest();
+            }
+        }
+
     }
 }

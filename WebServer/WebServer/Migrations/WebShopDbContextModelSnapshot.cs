@@ -106,6 +106,8 @@ namespace WebServer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Orders");
                 });
 
@@ -144,6 +146,9 @@ namespace WebServer.Migrations
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("VerificationStatus")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("Verified")
                         .HasColumnType("INTEGER");
@@ -186,7 +191,7 @@ namespace WebServer.Migrations
                 {
                     b.HasOne("WebServer.Models.User", "Customer")
                         .WithMany("Orders")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

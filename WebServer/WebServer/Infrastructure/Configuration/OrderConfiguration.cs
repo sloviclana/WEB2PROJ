@@ -12,7 +12,7 @@ namespace WebServer.Infrastructure.Configuration
             builder.Property(x=>x.Id).ValueGeneratedOnAdd();
             builder.HasOne(x => x.Customer)
                 .WithMany(x => x.Orders)
-                .HasForeignKey(x => x.Id)
+                .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
             builder.HasMany(x => x.Articles);
         }

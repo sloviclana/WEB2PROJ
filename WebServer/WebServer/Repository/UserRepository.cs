@@ -28,15 +28,23 @@ namespace WebServer.Repository
             _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).FullName = userNew.FullName;
             _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Username = userNew.Username;
 
-            if(_webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Password != userNew.Password)
+            if (!BCrypt.Net.BCrypt.Verify(userNew.Password, userPrev.Password))
+            {
                 _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Password = BCrypt.Net.BCrypt.HashPassword(userNew.Password);
+            }
 
-            _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Password = userNew.Password;
+            //if (_webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Password != userNew.Password)
+                //_webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Password = BCrypt.Net.BCrypt.HashPassword(userNew.Password);
+            //else
+                //_webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Password = BCrypt.Net.BCrypt.HashPassword(userPrev.Password);
+
+            //_webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Password = userNew.Password;
             //_webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Id = userNew.Id;
             _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Email = userNew.Email;
             _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).DateOfBirth = userNew.DateOfBirth;
             _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Address = userNew.Address;
             _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Verified = userNew.Verified;
+            _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).VerificationStatus = userNew.VerificationStatus;
 
 
             _webShopDbContext.SaveChanges();
@@ -46,6 +54,11 @@ namespace WebServer.Repository
         public User Find(User user)
         {
             return _webShopDbContext.Users.SingleOrDefault<User>(u => String.Equals(u.Email, user.Email));
+        }
+
+        public User FindByEmail(string email)
+        {
+            return _webShopDbContext.Users.SingleOrDefault<User>(u => String.Equals(u.Email, email));
         }
 
         public User FindById(long id)

@@ -11,6 +11,10 @@ namespace WebServer.Services.Interfaces
         UserLoginDto Verificate(UserDto userLoginDto);
         UserDto GetUser(long id);
         List<UserDto> GetRequests();
+
+        public UserDto GetUserByEmail(string email);
+
+        List<UserDto> GetAllSalesman();
         void Remove(UserDto user);
 
         

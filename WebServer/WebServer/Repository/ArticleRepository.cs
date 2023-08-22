@@ -34,7 +34,8 @@ namespace WebServer.Repository
 
         public Article Edit(Article article)
         {
-            _webShopDbContext.Articles.Update(article);
+            long id = article.Id;
+            _webShopDbContext.Articles.FirstOrDefault(a => a.Id == id).Quanity = article.Quanity;
             _webShopDbContext.SaveChanges();
             return article;
         }

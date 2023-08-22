@@ -25,7 +25,8 @@ namespace WebServer.Migrations
                     Address = table.Column<string>(type: "TEXT", nullable: false),
                     UserImage = table.Column<string>(type: "TEXT", nullable: false),
                     UserType = table.Column<int>(type: "INTEGER", nullable: false),
-                    Verified = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Verified = table.Column<bool>(type: "INTEGER", nullable: false),
+                    VerificationStatus = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -77,8 +78,8 @@ namespace WebServer.Migrations
                 {
                     table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Orders_Users_Id",
-                        column: x => x.Id,
+                        name: "FK_Orders_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -116,6 +117,11 @@ namespace WebServer.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Articles_UserId",
                 table: "Articles",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_UserId",
+                table: "Orders",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(

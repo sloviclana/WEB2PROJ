@@ -78,6 +78,38 @@ body {
   color: indigo;
 }
 
+.salesman-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ccc;
+}
+
+/* Apply styles to table headers */
+.salesman-table th {
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  padding: 12px; /* Increase padding for better spacing */
+  text-align: center; /* Center align header text */
+}
+
+/* Apply alternating row colors to table rows */
+.salesman-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Apply styles to table cells */
+.salesman-table td {
+  border: 1px solid #ccc;
+  padding: 12px; /* Increase padding for better spacing */
+  text-align: center; /* Center align cell content */
+  width: 20%; /* Set cell width as a percentage of the table width */
+}
+
+.salesman-table td .buttons button:disabled {
+  opacity: 0.5; /* Reduce opacity for disabled buttons */
+  cursor: not-allowed; /* Change cursor for disabled buttons */
+}
+
 .App-link {
   color: #61dafb;
 }

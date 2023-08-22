@@ -8,6 +8,7 @@ import SalesmanDashboard from './components/SalesmanDashboard';
 import CustomerDashboard from './components/CustomerDashboard';
 import Register from './components/Register';
 import Profile from './components/Profile';
+import Salesmans from './components/Salesmans';
 
 
 
@@ -21,7 +22,8 @@ function App() {
     {path: '/register', element: <Register></Register>},
     {path: '/salesmanDashboard', element: <SalesmanDashboard></SalesmanDashboard> },
     {path: '/customerDashboard', element: <CustomerDashboard></CustomerDashboard> },
-    {path: '/profile', element: <Profile></Profile>}
+    {path: '/profile', element: <Profile></Profile>},
+    {path: '/salesmans', element: <Salesmans></Salesmans>}
   ]
 
 

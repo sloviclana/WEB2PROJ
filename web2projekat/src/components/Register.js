@@ -22,6 +22,7 @@ const Register = () => {
     const[error, setError] = useState(false);
     const[deliveryPrice, setDeliveryPrice] = useState('');
     const[isVerified, setIsVerified] = useState('');
+    const[verificationStatus, setVerificationStatus] = useState('');
 
 
     const setInputsToEmpty = () => {
@@ -71,7 +72,8 @@ const Register = () => {
                 UserType : userType,
                 Address : address,
                 DeliveryPrice : deliveryPrice,
-                Verified : isVerified,
+                Verified : false,
+                VerificationStatus: verificationStatus,
                 UserImage : image
             }
         ;

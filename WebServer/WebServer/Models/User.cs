@@ -16,6 +16,8 @@ namespace WebServer.Models
         public UserType UserType { get; set; }
         public bool Verified { get; set; }
 
+        public VerificationStatus VerificationStatus { get; set; }
+
         public List<Order> Orders { get; set; }
 
 

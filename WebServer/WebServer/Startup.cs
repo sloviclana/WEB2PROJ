@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebServer.Dto;
 using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace WebServer
 {
@@ -125,9 +126,10 @@ namespace WebServer
             {
                 x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 x.JsonSerializerOptions.IgnoreNullValues = true;
+                //x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
             });
 
-
+            
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());

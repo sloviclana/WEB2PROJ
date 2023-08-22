@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Asn1.Ocsp;
 using WebServer.Dto;
+using WebServer.Models;
 using WebServer.Services.Interfaces;
 
 namespace WebServer.Controllers
@@ -34,6 +35,34 @@ namespace WebServer.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        [HttpGet("allSalesmans")]
+        public IActionResult GetAllSalesmans()
+        {
+            return Ok(_userService.GetAllSalesman());
+        }
+
+        [HttpPost("accept")]
+        public IActionResult AcceptVerificationRequest([FromBody]string email)
+        {
+            UserDto userDto = _userService.GetUserByEmail(email);
+
+            //UserDto newUser = userDto;
+            userDto.VerificationStatus = "ACCEPTED";
+
+            return Ok(_userService.Edit(userDto));
+        }
+
+        [HttpPost("deny")]
+        public IActionResult DenyVerificationRequest([FromBody]string email)
+        {
+            UserDto userDto = _userService.GetUserByEmail(email);
+
+            UserDto newUser = userDto;
+            userDto.VerificationStatus = "DENIED";
+
+            return Ok(_userService.Edit(userDto));
         }
 
         [HttpPost("register")]

@@ -11,6 +11,7 @@ namespace WebServer.Repository.Interfaces
         User Edit(User userPrev, User userNew);
         User Verify(User user);
         User FindById(long id);
+        User FindByEmail(string email);
         List<User> GetAll();
         void Remove(User user);
 

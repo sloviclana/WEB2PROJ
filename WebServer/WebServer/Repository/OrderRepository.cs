@@ -16,6 +16,7 @@ namespace WebServer.Repository
 
         public Order AddNew(Order order)
         {
+            //order.Id++;
             _webShopDbContext.Orders.Add(order);
             _webShopDbContext.SaveChanges();
             return order;
@@ -24,6 +25,7 @@ namespace WebServer.Repository
         public async Task AddNewAsync(Order order)
         {
             _webShopDbContext.Orders.Add(order);
+            //_webShopDbContext.Orders.FirstOrDefault()
             _webShopDbContext.SaveChanges();
         }
 
@@ -33,6 +35,14 @@ namespace WebServer.Repository
             _webShopDbContext.Orders.Update(order);
             _webShopDbContext.SaveChanges();
             return order;
+        }
+
+        public Task DeleteAsync(Order o)
+        {
+            //Order o = _webShopDbContext.Find(o => o.Id == id);
+            _webShopDbContext.Orders.Remove(o);
+            _webShopDbContext.SaveChangesAsync();
+            return null;
         }
 
         public Order EditOrderAddCommentRated(Order order)

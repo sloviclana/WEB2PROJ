@@ -3,12 +3,15 @@ import { useNavigate } from "react-router-dom";
 import {useState} from "react";
 import DatePicker from 'react-datepicker';
 import { UpdateUserProfile } from "../services/UserServices";
+import { Outlet, Link } from "react-router-dom";
+//import { useHistory } from 'react-router-dom';
 
 const Profile = () => {
 
     const user = sessionStorage['user'];
     const userDto = JSON.parse(user);
     const navigate = useNavigate();
+    //const history = useHistory();
     
     const[email, setEmail] = useState(userDto.Email);
     const[password, setPassword] = useState(userDto.Password);
@@ -22,7 +25,10 @@ const Profile = () => {
     const[error, setError] = useState(false);
     const[deliveryPrice, setDeliveryPrice] = useState('');
     const[isVerified, setIsVerified] = useState(userDto.Verified);
+    const[verificationStatus, setVerificationStatus] = useState(userDto.VerificationStatus);
 
+    //const[backLink, setBackLink] = useState('');
+    
     /* setEmail(userDto.email);
     setAddress(userDto.address);
     setDateOfBirth(userDto.dateOfBirth);
@@ -74,6 +80,7 @@ const Profile = () => {
                 Address : address,
                 DeliveryPrice : deliveryPrice,
                 Verified : isVerified,
+                VerificationStatus : verificationStatus,
                 UserImage : image
             };
 
@@ -145,7 +152,7 @@ const Profile = () => {
                     {error && password2.length === 0 ? <div className="redLabel">You must confirm your password!</div> : null}
                 </div>
 
-                <div className="field">
+                {/* <div className="field">
                             <label>Email </label>
                             <input type="email"
                                 value={email}
@@ -153,7 +160,7 @@ const Profile = () => {
                                 placeholder="Email"
                                 onChange={(e) => setEmail(e.target.value)}/>
                             {error && email.length === 0 ? <div className="redLabel">You must enter the email address!</div> : null}
-                </div>
+                </div> */}
 
                 <div className="field">
                     <label>Date of birth </label>
@@ -192,6 +199,8 @@ const Profile = () => {
                 </div>
 
             </form>
+
+            <button onClick={() => navigate(-1)}>Go Back</button>
         </div>
     );
 };

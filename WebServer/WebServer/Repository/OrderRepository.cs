@@ -37,12 +37,12 @@ namespace WebServer.Repository
             return order;
         }
 
-        public Task DeleteAsync(Order o)
+        public void DeleteAsync(Order o)
         {
             //Order o = _webShopDbContext.Find(o => o.Id == id);
             _webShopDbContext.Orders.Remove(o);
             _webShopDbContext.SaveChangesAsync();
-            return null;
+            //return null;
         }
 
         public Order EditOrderAddCommentRated(Order order)
@@ -54,7 +54,7 @@ namespace WebServer.Repository
 
         public Order Find(long id)
         {
-            return _webShopDbContext.Orders.FirstOrDefault(o => o.Id == id);
+            return _webShopDbContext.Orders.Include(o => o.Articles).FirstOrDefault(o => o.Id == id);
         }
 
         public async Task<Order> FindAsync(long id)
@@ -64,7 +64,7 @@ namespace WebServer.Repository
 
         public List<Order> GetAll()
         {
-            return _webShopDbContext.Orders.ToList();
+            return _webShopDbContext.Orders.Include(o => o.Articles).ToList();
         }
 
         public List<Order> GetAllFromUser(long id)

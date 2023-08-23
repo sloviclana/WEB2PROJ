@@ -42,5 +42,11 @@ namespace WebServer.Controllers
             return Ok(_orderService.GetAllForUSer(id));
         }
 
+        [HttpPost("cancelOrder")]
+        public IActionResult CancelOrder([FromBody]long orderId)
+        {
+            return Ok(_orderService.Decline(orderId));
+        }
+
     }
 }

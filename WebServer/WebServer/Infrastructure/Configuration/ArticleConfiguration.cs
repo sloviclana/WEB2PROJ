@@ -11,6 +11,7 @@ namespace WebServer.Infrastructure.Configuration
             builder.HasKey(a => a.Id);
             builder.Property(x=>x.Id).ValueGeneratedOnAdd();
             builder.HasOne(x => x.User);
+            //builder.HasMany()
             
         }
     }

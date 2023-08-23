@@ -14,7 +14,7 @@ namespace WebServer.Repository.Interfaces
         Task<Order> FindAsync(long id);
         Task AddNewAsync(Order order);
 
-        Task DeleteAsync(Order o);
+        void DeleteAsync(Order o);
 
         //OrderArticle AddNew(OrderArticle article);
 

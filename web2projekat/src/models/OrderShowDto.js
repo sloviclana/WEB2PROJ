@@ -1,5 +1,6 @@
 export default class OrderShowDto {
     constructor(data) {
+        this.Id = data.id;
         this.Articles = data.articles;
         this.UserId = data.userId;
         this.Comment = data.comment;

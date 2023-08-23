@@ -9,6 +9,10 @@ const SalesmanDashboard = () => {
         navigate('/profile');
     }
 
+    const newArticle = () => {
+        navigate('/newArticle');
+    }
+
     const user = sessionStorage['user'];
     const userDto = JSON.parse(user);
     const[verificationStatus, setVerificationStatus] = useState(userDto.VerificationStatus);
@@ -22,12 +26,12 @@ const SalesmanDashboard = () => {
     const actionsElement = document.getElementById('actions');
 
     const handleActions = () => {
-        if(verificationStatus == "PROCCESSING") {
+        if(verificationStatus === "PROCCESSING") {
 
             const message = "You are not allowed to take actions, because your account verification status is PROCCESSING.";
             ReactDOM.render(message, actionsElement);
 
-        } else if(verificationStatus == "DENIED") {
+        } else if(verificationStatus === "DENIED") {
             
             const message = "You are not allowed to take actions, because your account verification status is DENIED.";
             ReactDOM.render(message, actionsElement);
@@ -47,8 +51,17 @@ const SalesmanDashboard = () => {
             <p>You can also log out: </p>
             <button onClick={logout}>Log out</button>
 
-            <p>See another actions: </p>
+            {/*<p>See another actions: </p>*/}
             {/* <button onClick={handleActions}>Actions</button> */}
+            <br></br>
+            <br></br>
+            {verificationStatus === "PROCCESSING" ? 'You cannot take any actions since your account verification status is proccessing!' : ''}
+            {verificationStatus === "DENIED" ? 'You cannot take any actions since your account verification status is denied!' : ''}
+            {verificationStatus === "ACCEPTED" ? <div>
+                                                    <button onClick={newArticle}>Create new article</button>
+                                                    <button>See orders</button>
+                                                    </div> : ''}
+
             <div id='actions' className='actions'></div>
 
         </div>

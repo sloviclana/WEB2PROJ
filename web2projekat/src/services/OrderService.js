@@ -7,7 +7,6 @@ import OrderResponseDto from '../models/RegisterResponseDto';
 import OrderListResponseDto from '../models/OrderListResponseDto';
 //import SalesmanArray from '../models/SalesmanArray';
 
-
 export const AddNewOrder = async (OrderDto) => {
     const ORDER_URL = "api/orders/newOrder";
 
@@ -29,6 +28,24 @@ export const AddNewOrder = async (OrderDto) => {
     }
 }
 
+export const GetAllOrders = async () => {
+    const ALLORDERS_URL = "api/orders/allOrders";
+
+    try {
+        const {data} = await axios.get(`${process.env.REACT_APP_API_URL}${ALLORDERS_URL}`,
+       
+        );
+
+        const response = new OrderListResponseDto(data);
+        return response;
+
+    } catch(err) {
+        alert("Something went wrong with getting all orders!");
+        return null;
+    }
+
+}
+
 export const GetAllOrdersForUser = async (userId) => {
     const GETFORUSER_URL = "api/orders/allForUser";
 
@@ -46,6 +63,27 @@ export const GetAllOrdersForUser = async (userId) => {
 
     } catch(err) {
         alert("Something went wrong with getting previous orders!");
+        return null;
+    }
+}
+
+export const CancelOrder = async (orderId) => {
+    const CANCEL_URL = "api/orders/cancelOrder";
+
+    try {
+        const {data} = await axios.post(`${process.env.REACT_APP_API_URL}${CANCEL_URL}`,
+        orderId,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+        );
+
+        const response = new OrderListResponseDto(data);
+        return response;
+
+    } catch(err) {
+        alert("Something went wrong with canceling the order!");
         return null;
     }
 }

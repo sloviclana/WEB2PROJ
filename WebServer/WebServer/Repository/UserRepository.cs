@@ -30,7 +30,8 @@ namespace WebServer.Repository
 
             if (!BCrypt.Net.BCrypt.Verify(userNew.Password, userPrev.Password))
             {
-                _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Password = BCrypt.Net.BCrypt.HashPassword(userNew.Password);
+                if(userNew.Password != userPrev.Password)
+                    _webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Password = BCrypt.Net.BCrypt.HashPassword(userNew.Password);
             }
 
             //if (_webShopDbContext.Users.FirstOrDefault(u => u.Email == userPrev.Email).Password != userNew.Password)

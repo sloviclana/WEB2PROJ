@@ -34,7 +34,35 @@ namespace WebServer.Services
             foreach(OrderArticleDto article in orderDto.Articles)
             {
                 Article a = _articleRepository.GetArticle(article.Id);
+                /*
+                Article a = new Article() 
+                { 
+                    Id = article.Id, 
+                    Quanity = article.Quantity, 
+                    Name = "", 
+                    Description = "", 
+                    Price = 0,
+                    Image = "",
+                    UserId = 0
+                };*/
+                //int quantity = article.Quantity;
+                //a.Quanity = article.Quantity;
+
+                /*
+                articles.Add(new Article()
+                {
+                    Id = a.Id,
+                    Name = a.Name,
+                    Description = a.Description,
+                    Image = a.Image,
+                    UserId = a.UserId,
+                    Price = a.Price,
+                    Quanity = article.Quantity
+                });
+                */
+                //a.Quanity = quantity;
                 articles.Add(a);
+                //a.Quanity = a.Quanity - article.Quantity;
 
             }
 
@@ -57,6 +85,8 @@ namespace WebServer.Services
 
             _orderRepository.AddNew(newOrder);
 
+            //return orderDto;
+            
             try
             {
                 foreach(OrderArticleDto orderArticleDto in orderDto.Articles)
@@ -89,12 +119,34 @@ namespace WebServer.Services
                 //await _dbContext.SaveChangesAsync();
                 return null;
             }
-
+            
         }
 
         public bool Decline(long id)
         {
-            throw new NotImplementedException();
+            Order o = _orderRepository.Find(id);
+            var orderArticles = o.Articles;
+
+            bool success = false;
+
+            if(o == null)
+            {
+                success = false;
+
+            } else
+            {
+                foreach (var article in orderArticles)
+                {
+                    Article a = _articleRepository.GetArticle(article.Id);
+                    a.Quanity = a.Quanity + article.Quanity;
+                    _articleRepository.Edit(a);
+                }
+
+                _orderRepository.DeleteAsync(o);
+                success = true;
+            }
+
+            return success;
         }
 
         public List<OrderShowDto> GetAll()
@@ -118,6 +170,8 @@ namespace WebServer.Services
                     articlesForOrder.Add(articleDto);
                 }
 
+                bool delivered = (o.DeliveryTime < DateTime.Now);
+
                 OrderShowDto orderDto = new OrderShowDto()
                 {
                     Id = o.Id,
@@ -128,7 +182,7 @@ namespace WebServer.Services
                     Price = o.FinalPrice,
                     OrderTime = o.OrderTime,
                     DeliveryTime = o.DeliveryTime,
-                    IsDelevered = o.IsDelevered
+                    IsDelevered = delivered
                     //Id = o.Id,
                 };
 
@@ -162,7 +216,8 @@ namespace WebServer.Services
                 }
 
                 articlesForOrder = temp;
-                
+                bool delivered = (o.DeliveryTime < DateTime.Now);
+
                 OrderShowDto orderDto = new OrderShowDto()
                 {
                     Id = o.Id,
@@ -173,7 +228,7 @@ namespace WebServer.Services
                     Price = o.FinalPrice,
                     OrderTime = o.OrderTime,
                     DeliveryTime = o.DeliveryTime,
-                    IsDelevered = o.IsDelevered
+                    IsDelevered = delivered
                     //Id = o.Id,
                 };
 

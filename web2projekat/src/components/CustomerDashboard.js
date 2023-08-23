@@ -6,8 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import { GetAllArticles } from '../services/ArticleServices';
 import OrderDto from '../models/OrderDto';
 import OrderArticleDto from '../models/OrderArticleDto';
-import { AddNewOrder, GetAllOrdersForUser } from '../services/OrderService';
+import { AddNewOrder, CancelOrder, GetAllOrdersForUser } from '../services/OrderService';
 import { format } from 'date-fns';
+import OrderResponseDto from '../models/OrderResponseDto';
+
 
 const CustomerDashboard = () => {
     const navigate = useNavigate();
@@ -146,6 +148,26 @@ const CustomerDashboard = () => {
         timeZoneName: 'short'
       };
 
+      const cancelOrder = (orderId) => {
+        async function fetchData() {
+            try {
+              const response = await CancelOrder(orderId);
+  
+              if (response) {
+                  setArticles(response.articlesArray); // Set the fetched data to the state
+                  reloadPage();
+              }
+  
+  
+            } catch (error) {
+              // Handle error
+            }
+          }
+      
+          fetchData();
+        }
+      
+
     return (
         <div className='card'>
             <h1>Welcome, customer!</h1>
@@ -242,7 +264,7 @@ const CustomerDashboard = () => {
                     <th>Delivery address</th>
                     <th>Order time</th>
                     <th>Delivery time</th>
-                    
+                    <th>Status of order</th>
                     <th>Actions</th>
                     </tr>
                 </thead>
@@ -255,7 +277,8 @@ const CustomerDashboard = () => {
                         <td>{order.deliveryAddress}</td>
                         <td>{order.orderTime.split('.')[0]}</td>
                         <td>{order.deliveryTime.split('.')[0]}</td>
-                        <td><button disabled = {cancellation(order.orderTime) === 0}>Cancel order</button></td>
+                        <td>{order.isDelevered ? 'Delivered' : 'Not delivered'}</td>
+                        <td><button disabled = {cancellation(order.orderTime) === 0} onClick={() => cancelOrder(order.id)}>Cancel order</button></td>
                     </tr>
                     ))}
                 </tbody>

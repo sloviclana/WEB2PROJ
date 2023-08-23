@@ -67,12 +67,12 @@ namespace WebServer.Repository
             return _webShopDbContext.Orders.ToList();
         }
 
-        public List<Order> GetAllFromUser(long userId)
+        public List<Order> GetAllFromUser(long id)
         {
             var orders = new List<Order>();
-            foreach(Order o in _webShopDbContext.Orders)
+            foreach(Order o in _webShopDbContext.Orders.Include(o => o.Articles).ToList())
             {
-                if(o.UserId == userId)
+                if(o.UserId == id)
                     orders.Add(o);
             }
 

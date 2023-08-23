@@ -58,23 +58,6 @@ const Salesmans = () => {
     };
 
 
-
-      /* const renderActionsCell = (salesman) => {
-
-        
-
-        return (
-            <td>
-                {salesman.verificationStatus}
-                <div className="buttons">
-                    <button disabled = {!isProcessing} onClick={acceptRequest(salesman.email)}>Accept</button>
-                    <button disabled = {!isProcessing} onClick={denyRequest(salesman.email)}>Deny</button>
-                </div>
-            </td>
-        );
-      } */
-      
-
       
 
     return (
@@ -102,8 +85,8 @@ const Salesmans = () => {
                         {salesman.verificationStatus}
                         </td>
                         <td>
-                            <button disabled = {!(salesman.verificationStatus === "PROCCESSING")} onClick={() => acceptRequest(salesman.email)}>Accept</button>
-                            <button disabled = {!(salesman.verificationStatus === "PROCCESSING")} onClick={() => denyRequest(salesman.email)}>Deny</button>
+                            <button /* disabled = {!(salesman.verificationStatus === "PROCCESSING")} */ onClick={() => acceptRequest(salesman.email)}>Accept</button>
+                            <button /* disabled = {!(salesman.verificationStatus === "PROCCESSING")} */ onClick={() => denyRequest(salesman.email)}>Deny</button>
                         </td>
                         
                     </tr>

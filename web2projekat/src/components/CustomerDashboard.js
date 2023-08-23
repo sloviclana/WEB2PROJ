@@ -6,11 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import { GetAllArticles } from '../services/ArticleServices';
 import OrderDto from '../models/OrderDto';
 import OrderArticleDto from '../models/OrderArticleDto';
-import { AddNewOrder } from '../services/OrderService';
+import { AddNewOrder, GetAllOrdersForUser } from '../services/OrderService';
+import { format } from 'date-fns';
 
 const CustomerDashboard = () => {
     const navigate = useNavigate();
     const[articles, setArticles] = useState([]);
+    const[orders, setOrders] = useState([]);
     const[selectedValues, setSelectedValues] = useState([]);
     const[comment, setComment] = useState('');
     const[deliveryAddress, setDeliveryAddress] = useState('');
@@ -20,19 +22,34 @@ const CustomerDashboard = () => {
 
     const[articlesForOrder, setArticlesForOrder] = useState([]);
     const[order, setOrder] = useState(new OrderDto(null));
+    const[canCancel, setCanCancel] = useState(0);
    
 
     const profileRedirect = () => {
         navigate('/profile');
     }
 
+    
     useEffect(() => {
         async function fetchData() {
           try {
             const response = await GetAllArticles();
+
+            const user = sessionStorage.getItem('user');
+            const userDto = JSON.parse(user);
+            const userId = `${userDto.Id}`;
+            const response2 = await GetAllOrdersForUser(userId);
+
+            //cancellation(order.orderTime);
+
             if (response) {
                 setArticles(response.articlesArray); // Set the fetched data to the state
             }
+
+            if(response2) {
+                setOrders(response2.ordersArray);
+            }
+
           } catch (error) {
             // Handle error
           }
@@ -40,6 +57,11 @@ const CustomerDashboard = () => {
     
         fetchData();
       }, []);
+
+      /*const user = sessionStorage.getItem('user');
+            const userDto = JSON.parse(user);
+            const email = userDto.Email;
+            const response2 = await GetAllOrdersForUser(email);*/
 
     function reloadPage() {
         window.location.reload();
@@ -88,6 +110,19 @@ const CustomerDashboard = () => {
         
     }
 
+    const cancellation = (orderTime) => {
+        const isoDateWithoutFractionalSeconds = orderTime.split('.')[0];
+
+        const parsedDate = new Date(isoDateWithoutFractionalSeconds);
+        parsedDate.setHours(parsedDate.getHours() + 1);
+        const currentDatetime = new Date();
+
+        if(parsedDate > currentDatetime)
+            return 1;
+        else 
+            return 0;
+    }
+
     const handleSelectChange = (articleId, e) => {
         setSelectedValues({
             ...selectedValues,
@@ -97,15 +132,29 @@ const CustomerDashboard = () => {
         // You can store this selectedQuantity in your component's state or use it directly when needed
       };
 
+      const formatArticles = (articles) => {
+        return articles.map((article) => `${article.id} (${article.quantity})`).join(', ');
+      };
+
+      const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZoneName: 'short'
+      };
+
     return (
         <div className='card'>
             <h1>Welcome, customer!</h1>
-            <p>Here you can check/change your profile data   </p>
+            Here you can check/change your profile data <br></br>
             <button onClick={profileRedirect}>Profile</button>
-
-            <p>You can also log out: </p>
+            <br></br> <br></br>
+            You can also log out: <br></br>
             <button onClick={logout}>Log out</button>
-
+            <br></br> <br></br>
             <table className="salesman-table">
                 <thead>
                     <tr>
@@ -181,7 +230,38 @@ const CustomerDashboard = () => {
             <br></br>
             Total price of your order: {price + 300} <br></br>
             <button onClick={finishOrder}>Finish your order</button>
-
+            <br></br>
+            <br></br>
+            Here are your previous orders. You can cancel your order 1h after creating it, later it will be in delivery proccess. <br></br>
+            <table className="salesman-table">
+                <thead>
+                    <tr>
+                    <th>Price</th>
+                    <th>Articles</th>
+                    <th>Comment</th>
+                    <th>Delivery address</th>
+                    <th>Order time</th>
+                    <th>Delivery time</th>
+                    
+                    <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {orders.map(order => (
+                    <tr key={order.id}>
+                        <td>{order.price}</td>
+                        <td>{formatArticles(order.articles)}</td>
+                        <td>{order.comment}</td>
+                        <td>{order.deliveryAddress}</td>
+                        <td>{order.orderTime.split('.')[0]}</td>
+                        <td>{order.deliveryTime.split('.')[0]}</td>
+                        <td><button disabled = {cancellation(order.orderTime) === 0}>Cancel order</button></td>
+                    </tr>
+                    ))}
+                </tbody>
+            </table>
+            <br></br>
+            <br></br>
             <button onClick={() => navigate(-1)}>Go Back</button>
         </div>
         

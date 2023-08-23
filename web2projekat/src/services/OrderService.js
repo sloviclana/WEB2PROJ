@@ -4,6 +4,7 @@ import OrderArticleDto from '../models/OrderArticleDto';
 import OrderDto from '../models/OrderDto';
 import axios from 'axios';
 import OrderResponseDto from '../models/RegisterResponseDto';
+import OrderListResponseDto from '../models/OrderListResponseDto';
 //import SalesmanArray from '../models/SalesmanArray';
 
 
@@ -24,6 +25,27 @@ export const AddNewOrder = async (OrderDto) => {
 
     } catch(err) {
         alert("Something went wrong with ordering!");
+        return null;
+    }
+}
+
+export const GetAllOrdersForUser = async (userId) => {
+    const GETFORUSER_URL = "api/orders/allForUser";
+
+    try {
+        const {data} = await axios.get(`${process.env.REACT_APP_API_URL}${GETFORUSER_URL}`,
+        {
+            params: { userId }, // Pass the email as a query parameter
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          }
+        );
+
+        const response = new OrderListResponseDto(data);
+        return response;
+
+    } catch(err) {
+        alert("Something went wrong with getting previous orders!");
         return null;
     }
 }

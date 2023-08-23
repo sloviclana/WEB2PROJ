@@ -6,8 +6,8 @@ namespace WebServer.Services.Interfaces
     public interface IOrderService
     {
         OrderDto AddNew(OrderDto orderDto);
-        List<OrderDto> GetAllForUSer(long id);
-        List<OrderDto> GetAll();
+        List<OrderShowDto> GetAllForUSer(long id);
+        List<OrderShowDto> GetAll();
         List<OrderDto> GetForSpecialUser(int id);
         List<OrderDto> GetForSpecialUserNew(int id);
         bool Decline(long id);

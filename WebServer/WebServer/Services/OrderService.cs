@@ -97,11 +97,11 @@ namespace WebServer.Services
             throw new NotImplementedException();
         }
 
-        public List<OrderDto> GetAll()
+        public List<OrderShowDto> GetAll()
         {
             var orders = _orderRepository.GetAll();
 
-            List<OrderDto> orderDtos = new List<OrderDto>();
+            List<OrderShowDto> orderDtos = new List<OrderShowDto>();
             List<OrderArticleDto> articlesForOrder = new List<OrderArticleDto>();
 
 
@@ -118,29 +118,34 @@ namespace WebServer.Services
                     articlesForOrder.Add(articleDto);
                 }
 
-                OrderDto orderDto = new OrderDto()
+                OrderShowDto orderDto = new OrderShowDto()
                 {
+                    Id = o.Id,
                     Articles = articlesForOrder,
                     UserId = o.UserId,
                     Comment = o.Comment,
                     DeliveryAddress = o.DeliveryAddress,
-                    Price = o.FinalPrice
+                    Price = o.FinalPrice,
+                    OrderTime = o.OrderTime,
+                    DeliveryTime = o.DeliveryTime,
+                    IsDelevered = o.IsDelevered
                     //Id = o.Id,
                 };
 
                 orderDtos.Add(orderDto);
-                articlesForOrder.Clear();
+                //articlesForOrder.Clear();
             }
 
             return orderDtos;
         }
 
-        public List<OrderDto> GetAllForUSer(long id)
+        public List<OrderShowDto> GetAllForUSer(long id)
         {
             var orders = _orderRepository.GetAllFromUser(id);
 
-            List<OrderDto> orderDtos = new List<OrderDto>();
+            List<OrderShowDto> orderDtos = new List<OrderShowDto>();
             List<OrderArticleDto> articlesForOrder = new List<OrderArticleDto>();
+            List<OrderArticleDto> temp = new List<OrderArticleDto>();
 
 
             foreach (Order o in orders)
@@ -153,21 +158,28 @@ namespace WebServer.Services
                         Quantity = article.Quanity
                     };
 
-                    articlesForOrder.Add(articleDto);
+                    temp.Add(articleDto);
                 }
 
-                OrderDto orderDto = new OrderDto()
+                articlesForOrder = temp;
+                
+                OrderShowDto orderDto = new OrderShowDto()
                 {
+                    Id = o.Id,
                     Articles = articlesForOrder,
                     UserId = o.UserId,
                     Comment = o.Comment,
                     DeliveryAddress = o.DeliveryAddress,
-                    Price = o.FinalPrice
+                    Price = o.FinalPrice,
+                    OrderTime = o.OrderTime,
+                    DeliveryTime = o.DeliveryTime,
+                    IsDelevered = o.IsDelevered
                     //Id = o.Id,
                 };
 
                 orderDtos.Add(orderDto);
-                articlesForOrder.Clear();
+
+                temp.Clear();
             }
 
             return orderDtos;

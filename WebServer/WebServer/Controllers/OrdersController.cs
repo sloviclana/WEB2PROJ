@@ -34,5 +34,13 @@ namespace WebServer.Controllers
             return Ok(_orderService.GetAll());
         }
 
+        [HttpGet("allForUser")]
+        public IActionResult GetAllForUser([FromQuery]string userId)
+        {
+            long id = long.Parse(userId);
+
+            return Ok(_orderService.GetAllForUSer(id));
+        }
+
     }
 }

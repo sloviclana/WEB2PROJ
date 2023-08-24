@@ -75,6 +75,8 @@ const CustomerDashboard = () => {
 
     const logout = () => {
         sessionStorage['user'] = null;
+        sessionStorage['token'] = null;
+        sessionStorage['isAuth'] = JSON.stringify(false);
         navigate('/');
     }
 

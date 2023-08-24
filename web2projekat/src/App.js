@@ -11,11 +11,11 @@ import Profile from './components/Profile';
 import Salesmans from './components/Salesmans';
 import AddNewArticle from './components/AddNewArticle';
 import SalesmansOrders from './components/SalesmansOrders';
+import { useEffect } from 'react';
 
 
 
 function App() {
-
   
   const routes = [
     {path: '/', element: <Home></Home>},
@@ -27,7 +27,7 @@ function App() {
     {path: '/profile', element: <Profile></Profile>},
     {path: '/salesmans', element: <Salesmans></Salesmans>},
     {path: '/newArticle', element: <AddNewArticle></AddNewArticle>},
-    {path: 'salesmansOrders', element: <SalesmansOrders></SalesmansOrders>}
+    {path: '/salesmansOrders', element: <SalesmansOrders></SalesmansOrders>}
   ]
 
 

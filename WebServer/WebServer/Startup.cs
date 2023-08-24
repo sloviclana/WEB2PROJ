@@ -13,6 +13,7 @@ using System.Text;
 using WebServer.Dto;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using WebServer.Infrastructure.Configuration;
 
 namespace WebServer
 {
@@ -110,7 +111,11 @@ namespace WebServer
             {
                 options.AddPolicy("user", policy => policy.RequireClaim("user")); //Ovde mozemo kreirati pravilo za validaciju nekog naseg claima
             });
-            
+
+            var emailVerifyConfiguration = Configuration
+                 .GetSection("EmailVerifyConfiguration")
+                 .Get<EmailVerifyConfiguration>();
+            services.AddSingleton(emailVerifyConfiguration);
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IArticleService, ArticleService>();
@@ -119,6 +124,7 @@ namespace WebServer
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IArticleRepository, ArticleRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IEmailVerifyService, EmailVerifyService>();
 
 
             //dodavanje za konverziju enumeracija, sa fronta saljem enumeraciju kao string, on je konvertuje ispravno

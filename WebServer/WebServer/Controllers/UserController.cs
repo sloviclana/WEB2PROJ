@@ -14,14 +14,16 @@ namespace WebServer.Controllers
 
         private readonly IUserService _userService;
         //private readonly IAuthService _authService;
+        private readonly IEmailVerifyService _emailVerifyService;
 
         IWebHostEnvironment webHostEnvironment;
 
-        public UserController(IUserService userService, IWebHostEnvironment webHostEnvironment)
+        public UserController(IUserService userService, IWebHostEnvironment webHostEnvironment, IEmailVerifyService emailVerifyService)
         {
             _userService = userService;
             //_authService = authService;
             this.webHostEnvironment = webHostEnvironment;
+            _emailVerifyService = emailVerifyService;
         }
 
         //[HttpPost("login")]
@@ -50,6 +52,7 @@ namespace WebServer.Controllers
 
             //UserDto newUser = userDto;
             userDto.VerificationStatus = "ACCEPTED";
+            _emailVerifyService.SendVerificationMail(userDto.Email, "ACCEPTED");
 
             return Ok(_userService.Edit(userDto));
         }
@@ -61,6 +64,7 @@ namespace WebServer.Controllers
 
             UserDto newUser = userDto;
             userDto.VerificationStatus = "DENIED";
+            _emailVerifyService.SendVerificationMail(userDto.Email, "DENIED");
 
             return Ok(_userService.Edit(userDto));
         }

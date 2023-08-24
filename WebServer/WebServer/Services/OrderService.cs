@@ -14,7 +14,7 @@ namespace WebServer.Services
         private readonly IArticleRepository _articleRepository;
         private readonly IMapper _mapper;
         
-        //private readonly Mutex mutex = new Mutex();
+        private readonly Mutex mutex = new Mutex();
 
 
         public OrderService(IOrderRepository orderRepository, IMapper mapper, IUserRepository userRepository, IArticleRepository articleRepository)
@@ -86,11 +86,14 @@ namespace WebServer.Services
             _orderRepository.AddNew(newOrder);
 
             //return orderDto;
-            
+
+
+
             try
             {
                 foreach(OrderArticleDto orderArticleDto in orderDto.Articles)
                 {
+                    mutex.WaitOne();
                     Article article = _articleRepository.GetArticle(orderArticleDto.Id);
 
                     if(article == null)
@@ -110,14 +113,15 @@ namespace WebServer.Services
 
                 return orderDto;
 
-            } catch (Exception ex)
+            } finally
             {
-                Console.WriteLine(ex.Message);
+                //Console.WriteLine(ex.Message);
                 //obrisati porudzbinu
                 //PorudzbinaHelperClass.ReturnKolicinaArtikalaPorudzbine(newPorudzbinaDto.ArtikliPorudzbine, _dbContext);
-                _orderRepository.DeleteAsync(newOrder);
+                //_orderRepository.DeleteAsync(newOrder);
                 //await _dbContext.SaveChangesAsync();
-                return null;
+                mutex.ReleaseMutex();
+                //return null;
             }
             
         }

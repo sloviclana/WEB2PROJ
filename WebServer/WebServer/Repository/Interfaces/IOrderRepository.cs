@@ -7,6 +7,8 @@ namespace WebServer.Repository.Interfaces
 
         Order AddNew(Order order);
         List<Order> GetAllFromUser(long id);
+
+        List<Order> GetAllForSalesman(long id);
         List<Order> GetAll();
         Order Decline(Order order);
         Order Find(long id);

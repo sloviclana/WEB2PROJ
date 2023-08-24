@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebServer.Dto;
 using WebServer.Services;
 using WebServer.Services.Interfaces;
 
@@ -24,5 +25,14 @@ namespace WebServer.Controllers
         {
             return Ok(_articleService.GetAll());
         }
+
+        [HttpPost("newArticle")]
+        public IActionResult AddNewArticle([FromBody] ArticleDto articleDto)
+        {
+            return Ok(_articleService.AddNew(articleDto));
+        }
+
+        
+
     }
 }

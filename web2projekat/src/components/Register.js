@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import 'react-datepicker/dist/react-datepicker.css'; // Import the styles
 import axios from 'axios';
 import { RegisterUser } from "../services/UserServices";
+import UploadImage from "./UploadImage";
 
 const Register = () => {
 
@@ -23,6 +24,7 @@ const Register = () => {
     const[deliveryPrice, setDeliveryPrice] = useState('');
     const[isVerified, setIsVerified] = useState('');
     const[verificationStatus, setVerificationStatus] = useState('');
+    const[salesmanSelected, setSalesmanSelected] = useState(0);
 
 
     const setInputsToEmpty = () => {
@@ -41,6 +43,7 @@ const Register = () => {
 
     const handleSelectChange = (event) => {
         setUserType(event.target.value);
+        {userType === "SALESMAN" ? setSalesmanSelected(1) : setSalesmanSelected(0);}
       };
 
     const redirectTo = () => {
@@ -176,11 +179,31 @@ const Register = () => {
                             <label>User type </label>
                             <select value={userType} name="userType" placeholder="User type" onChange={handleSelectChange}>
                                 <option value="">Select user type</option>
-                                <option value={'ADMIN'}>ADMIN</option>
+                                {/* <option value={'ADMIN'}>ADMIN</option> */}
                                 <option value={'SALESMAN'}>SALESMAN</option>
                                 <option value={'CUSTOMER'}>CUSTOMER</option>
                             </select>
                             {error && userType.length === 0 ? <div className="redLabel">You must select user type!</div> : null}
+                </div>
+
+                {salesmanSelected === 0 ? 
+                <div className="field">
+                    <label>Since you are a salesman, you must enter your delivery price!</label>
+                    <input type="number" 
+                    value = {deliveryPrice} 
+                    name = "deliveryPrice" 
+                    placeholder="Delivery price" 
+                    onChange={(e) => setDeliveryPrice(e.target.value)}>
+                </input> 
+                {error && deliveryPrice.length === 0 ? <div className="redLabel">You must enter delivery price!</div> : null}
+                </div> : null}
+                
+                
+                
+
+                <div className="field">
+                        <label>Image: </label> 
+                        <UploadImage slika={image} setSlika={setImage}></UploadImage>
                 </div>
 
                 <div className="buttons-flex">
@@ -189,7 +212,8 @@ const Register = () => {
                 </div>
 
             </form>
-            
+            <br></br>
+            <button onClick={() => navigate(-1)}>Go Back</button>
         </div>
 
         

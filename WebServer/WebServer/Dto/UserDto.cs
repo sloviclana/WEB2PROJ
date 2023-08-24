@@ -32,5 +32,7 @@ namespace WebServer.Dto
         public string VerificationStatus { get; set; }
 
         public bool Verified { get; set; }
+
+        //public double DeliveryPrice { get; set; }
     }
 }

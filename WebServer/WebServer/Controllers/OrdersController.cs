@@ -48,5 +48,12 @@ namespace WebServer.Controllers
             return Ok(_orderService.Decline(orderId));
         }
 
+        [HttpGet("allForSalesman")]
+        public IActionResult GetAllForSalesman([FromQuery]string userId)
+        {
+            long id = long.Parse(userId);
+            return Ok(_orderService.GetForSalesman(id));
+        }
+
     }
 }

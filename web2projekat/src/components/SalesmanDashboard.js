@@ -13,6 +13,10 @@ const SalesmanDashboard = () => {
         navigate('/newArticle');
     }
 
+    const seeOrders = () => {
+        navigate('/salesmansOrders');
+    }
+
     const user = sessionStorage['user'];
     const userDto = JSON.parse(user);
     const[verificationStatus, setVerificationStatus] = useState(userDto.VerificationStatus);
@@ -59,7 +63,7 @@ const SalesmanDashboard = () => {
             {verificationStatus === "DENIED" ? 'You cannot take any actions since your account verification status is denied!' : ''}
             {verificationStatus === "ACCEPTED" ? <div>
                                                     <button onClick={newArticle}>Create new article</button>
-                                                    <button>See orders</button>
+                                                    <button onClick = {seeOrders}>See orders</button>
                                                     </div> : ''}
 
             <div id='actions' className='actions'></div>

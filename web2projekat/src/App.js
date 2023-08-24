@@ -10,6 +10,7 @@ import Register from './components/Register';
 import Profile from './components/Profile';
 import Salesmans from './components/Salesmans';
 import AddNewArticle from './components/AddNewArticle';
+import SalesmansOrders from './components/SalesmansOrders';
 
 
 
@@ -25,7 +26,8 @@ function App() {
     {path: '/customerDashboard', element: <CustomerDashboard></CustomerDashboard> },
     {path: '/profile', element: <Profile></Profile>},
     {path: '/salesmans', element: <Salesmans></Salesmans>},
-    {path: '/newArticle', element: <AddNewArticle></AddNewArticle>}
+    {path: '/newArticle', element: <AddNewArticle></AddNewArticle>},
+    {path: 'salesmansOrders', element: <SalesmansOrders></SalesmansOrders>}
   ]
 
 

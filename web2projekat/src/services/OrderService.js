@@ -67,6 +67,28 @@ export const GetAllOrdersForUser = async (userId) => {
     }
 }
 
+export const GetAllForSalesman = async (userId) => {
+    const GETFORSALESMAN_URL = "api/orders/allForSalesman";
+
+    try {
+        const {data} = await axios.get(`${process.env.REACT_APP_API_URL}${GETFORSALESMAN_URL}`,
+        {
+            params: { userId }, // Pass the email as a query parameter
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          }
+        );
+
+        const response = new OrderListResponseDto(data);
+        return response;
+
+    } catch(err) {
+        alert("Something went wrong with getting previous orders!");
+        return null;
+    }
+
+}
+
 export const CancelOrder = async (orderId) => {
     const CANCEL_URL = "api/orders/cancelOrder";
 

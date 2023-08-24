@@ -8,7 +8,7 @@ namespace WebServer.Services.Interfaces
         OrderDto AddNew(OrderDto orderDto);
         List<OrderShowDto> GetAllForUSer(long id);
         List<OrderShowDto> GetAll();
-        List<OrderDto> GetForSpecialUser(int id);
+        List<OrderShowDto> GetForSalesman(long id);
         List<OrderDto> GetForSpecialUserNew(int id);
         bool Decline(long id);
         OrderDto GetToShowOrder(long id);

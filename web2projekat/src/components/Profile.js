@@ -4,6 +4,7 @@ import {useState} from "react";
 import DatePicker from 'react-datepicker';
 import { UpdateUserProfile } from "../services/UserServices";
 import { Outlet, Link } from "react-router-dom";
+import UploadImage from "./UploadImage";
 //import { useHistory } from 'react-router-dom';
 
 const Profile = () => {
@@ -64,6 +65,7 @@ const Profile = () => {
         setImage('');
         setDeliveryPrice('');
         setIsVerified('');
+        //setImage('');
     }
 
     const handleSubmit = async (event) => {
@@ -192,6 +194,27 @@ const Profile = () => {
                             </select>
                             {error && userType.length === 0 ? <div className="redLabel">You must select user type!</div> : null}
                 </div> */}
+
+                {userType === "SALESMAN" ? <div className="field">
+                    <label>Delivery price</label>
+                    <input type="number" 
+                        value = {deliveryPrice} 
+                        name = "deliveryPrice" 
+                        placeholder="Delivery price" 
+                        onChange={(e) => setDeliveryPrice(e.target.value)}>
+                    </input> 
+                    {error && deliveryPrice.length === 0 ? <div className="redLabel">You must enter delivery price!</div> : null}
+                </div> : null}
+                
+
+                <div className="field">
+                <label>Image: </label>
+                <UploadImage slika={image} setSlika={setImage}></UploadImage>
+                    {error && image.length === 0 ?  <div className="ui pointing red basic label">
+                            You must choose image!
+                            </div>
+                        : null}
+                </div>
 
                 <div className="buttons-flex">
                         <button className="blueButton" type="submit" onClick={handleSubmit}>Update profile</button>

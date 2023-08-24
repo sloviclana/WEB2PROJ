@@ -67,6 +67,22 @@ namespace WebServer.Repository
             return _webShopDbContext.Orders.Include(o => o.Articles).ToList();
         }
 
+        public List<Order> GetAllForSalesman(long id)
+        {
+            var orders = _webShopDbContext.Orders.Include(o =>o.Articles).ToList();
+
+            List<Order> result = new List<Order>();
+
+            foreach(Order o in orders)
+            {
+                if (o.Articles.Find(a => a.UserId == id) != null)
+                    result.Add(o);
+
+            }
+
+            return result;
+        }
+
         public List<Order> GetAllFromUser(long id)
         {
             var orders = new List<Order>();

@@ -199,7 +199,13 @@ const CustomerDashboard = () => {
                         <td>
                         {article.description}
                         </td>
-                        <td>{article.image}</td>
+                        <td> <img
+                            className="ui centered medium image"
+                            src= {article.image}
+                            //alt="file preview"
+                            width={150}
+                            height={150}
+                            ></img></td>
                         <td>
                         Quantity:
                         <select value={selectedValues[article.id] || ''} onChange={(e) => handleSelectChange(article.id, e)}>

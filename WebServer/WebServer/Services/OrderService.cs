@@ -240,9 +240,43 @@ namespace WebServer.Services
             return orderDtos;
         }
 
-        public List<OrderDto> GetForSpecialUser(int id)
+        public List<OrderShowDto> GetForSalesman(long id)
         {
-            throw new NotImplementedException();
+            var orders = _orderRepository.GetAllForSalesman(id);
+
+            List<OrderShowDto> result = new List<OrderShowDto>();
+
+            foreach(Order o in orders)
+            {
+                List<OrderArticleDto> articlesForOrder = new List<OrderArticleDto>();
+
+                foreach(Article a in o.Articles)
+                {
+                    OrderArticleDto orderArticleDto = new OrderArticleDto()
+                    {
+                        Id = a.Id,
+                        Quantity = a.Quanity
+                    };
+
+                    articlesForOrder.Add(orderArticleDto);
+                }
+
+                OrderShowDto order = new OrderShowDto()
+                {
+                    Articles = articlesForOrder,
+                    UserId = o.UserId,
+                    Comment = o.Comment,
+                    DeliveryAddress = o.DeliveryAddress,
+                    DeliveryTime = o.DeliveryTime,
+                    OrderTime = o.OrderTime,
+                    IsDelevered = o.IsDelevered,
+                    Price = o.FinalPrice
+                };
+
+                result.Add(order);
+            }
+
+            return result;
         }
 
         public List<OrderDto> GetForSpecialUserNew(int id)

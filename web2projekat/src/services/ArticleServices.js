@@ -20,3 +20,26 @@ export const GetAllArticles = async () => {
         return null;
     }
 }
+
+export const AddArticle = async (ArticleDto) => {
+    const ADDARTICLE_URL = "api/articles/newArticle";
+
+    try{
+        const {data} = await axios.post(`${process.env.REACT_APP_API_URL}${ADDARTICLE_URL}`,
+        ArticleDto,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+        );
+
+        const response = new ArticlesArray(data);
+        return response;
+
+    } catch(err) {
+        
+        alert("Cannot get information about articles!");
+        return null;
+    }
+
+}

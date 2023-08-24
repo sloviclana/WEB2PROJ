@@ -195,7 +195,7 @@ const Profile = () => {
                             {error && userType.length === 0 ? <div className="redLabel">You must select user type!</div> : null}
                 </div> */}
 
-                {userType === "SALESMAN" ? <div className="field">
+                {/* {userType === "SALESMAN" ? <div className="field">
                     <label>Delivery price</label>
                     <input type="number" 
                         value = {deliveryPrice} 
@@ -204,7 +204,7 @@ const Profile = () => {
                         onChange={(e) => setDeliveryPrice(e.target.value)}>
                     </input> 
                     {error && deliveryPrice.length === 0 ? <div className="redLabel">You must enter delivery price!</div> : null}
-                </div> : null}
+                </div> : null} */}
                 
 
                 <div className="field">

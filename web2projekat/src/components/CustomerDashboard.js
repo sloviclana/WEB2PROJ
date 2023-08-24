@@ -9,6 +9,7 @@ import OrderArticleDto from '../models/OrderArticleDto';
 import { AddNewOrder, CancelOrder, GetAllOrdersForUser } from '../services/OrderService';
 import { format } from 'date-fns';
 import OrderResponseDto from '../models/OrderResponseDto';
+import CountdownTimer from './CountdownTimer';
 
 
 const CustomerDashboard = () => {
@@ -283,7 +284,7 @@ const CustomerDashboard = () => {
                         <td>{order.deliveryAddress}</td>
                         <td>{order.orderTime.split('.')[0]}</td>
                         <td>{order.deliveryTime.split('.')[0]}</td>
-                        <td>{order.isDelevered ? 'Delivered' : 'Not delivered'}</td>
+                        <td>{order.isDelevered ? 'Delivered' : <CountdownTimer deliveryTime={order.deliveryTime.split('.')[0]} />}</td>
                         <td><button disabled = {cancellation(order.orderTime) === 0} onClick={() => cancelOrder(order.id)}>Cancel order</button></td>
                     </tr>
                     ))}
@@ -291,7 +292,7 @@ const CustomerDashboard = () => {
             </table>
             <br></br>
             <br></br>
-            <button onClick={() => navigate(-1)}>Go Back</button>
+            
         </div>
         
     )

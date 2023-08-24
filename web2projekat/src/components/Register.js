@@ -186,7 +186,7 @@ const Register = () => {
                             {error && userType.length === 0 ? <div className="redLabel">You must select user type!</div> : null}
                 </div>
 
-                {salesmanSelected === 0 ? 
+                {/* {salesmanSelected === 0 ? 
                 <div className="field">
                     <label>Since you are a salesman, you must enter your delivery price!</label>
                     <input type="number" 
@@ -196,7 +196,7 @@ const Register = () => {
                     onChange={(e) => setDeliveryPrice(e.target.value)}>
                 </input> 
                 {error && deliveryPrice.length === 0 ? <div className="redLabel">You must enter delivery price!</div> : null}
-                </div> : null}
+                </div> : null} */}
                 
                 
                 
@@ -204,6 +204,7 @@ const Register = () => {
                 <div className="field">
                         <label>Image: </label> 
                         <UploadImage slika={image} setSlika={setImage}></UploadImage>
+                        {error && image.length === 0 ? <div className="redLabel">You must enter delivery price!</div> : null}
                 </div>
 
                 <div className="buttons-flex">

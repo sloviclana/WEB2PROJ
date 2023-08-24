@@ -2,10 +2,14 @@ import React from "react";
 import { GetAllForSalesman } from "../services/OrderService";
 import { useState } from "react";
 import { useEffect } from "react";
+import CountdownTimer from "./CountdownTimer";
+import { useNavigate } from "react-router-dom";
 
 const SalesmansOrders = () => {
 
     const[orders, setOrders] = useState([]);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchData() {
@@ -66,12 +70,15 @@ const SalesmansOrders = () => {
                         <td>{order.deliveryAddress}</td>
                         <td>{order.orderTime.split('.')[0]}</td>
                         <td>{order.deliveryTime.split('.')[0]}</td>
-                        <td>{order.isDelevered ? 'Delivered' : 'Not delivered'}</td>
+                        <td>{order.isDelevered ? 'Delivered' : <CountdownTimer deliveryTime={order.deliveryTime.split('.')[0]} />}</td>
                         <td>{order.isDelevered ? 'PREVIOUS' : 'NEW'}</td>
                     </tr>
                     ))}
                 </tbody>
             </table>
+
+            <br></br>
+            <button onClick={() => navigate(-1)}>Go Back</button>
         </div>
     );
 }
